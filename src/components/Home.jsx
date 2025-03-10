@@ -4,18 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+
 const Home = () => {
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem('userDetails');
-        navigate('/login');
+        navigate('/Login');
     };
     return (
         <div>
             {/* Navigation Bar */}
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand>School Management System</Navbar.Brand>
+                    <Navbar.Brand>Ecommerce Website</Navbar.Brand>
                     <Nav className="ms-auto">
                         <Button variant="outline-light" onClick={handleLogout}>
                             Logout
@@ -28,10 +29,10 @@ const Home = () => {
             <Container className="mt-4">
                 <Card>
                     <Card.Body>
-                        <Card.Title>Welcome to the School Management System</Card.Title>
+                        <Card.Title>Welcome to Ecommerce site</Card.Title>
                         <Card.Text>
-                            Our system helps you manage student registrations, teacher details, attendance records,
-                            grades, and more, all in one efficient platform.
+                            Our system helps you to give you great shopping experience. You can view products, add to cart, place order, track
+                            and more, all in one efficient platform.
                         </Card.Text>
                         {/* Additional navigation buttons */}
                         {/* <div>
