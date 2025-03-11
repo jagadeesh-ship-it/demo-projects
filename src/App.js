@@ -1,19 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Signup from "./components/Signup";  
-import Login from "./components/Login";
-import Home from "./components/Home";
 
-function App() {
+import React, { useState } from 'react';
+import Signup from './components/Signup';
+import Login from './components/Login';
+
+   
+
+const App = () => {
+    const [view, setView] = useState("login");
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Home />} />  
-                <Route path="/Signup" element={<Signup />} /> 
-                <Route path="/Login" element={<Login />} />  
-            </Routes>
-        </Router>
+        <div className="container">
+            {view === "login" ? <Login setView={setView} /> : <Signup setView={setView} />}
+        </div>
     );
-}
+};
 
 export default App;
