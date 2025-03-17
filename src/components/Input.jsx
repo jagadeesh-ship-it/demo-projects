@@ -1,69 +1,21 @@
-// import React from 'react';
+import React from "react";
 
-// const Input = ({ title, id, placeholder, type = "text", value, setChangeValue, error }) => {
-//     return (
-//         <div style={{ marginBottom: "10px" }}>
-//             <label htmlFor={id} style={{ display: "block", fontWeight: "bold" }}>{title}</label>
-//             <input
-//                 id={id}
-//                 type={type}
-//                 placeholder={placeholder}
-//                 value={value}
-//                 onChange={(e) => setChangeValue(e.target.value)}
-//                 style={{
-//                     width: "100%",
-//                     padding: "8px",
-//                     border: error ? "2px solid red" : "1px solid #ccc",
-//                     borderRadius: "4px"
-//                 }}
-//             />
-//             {error && <p style={{ color: "red", fontSize: "12px" }}>{error}</p>}
-//         </div>
-//     );
-// };
-
-// export default Input;  
-
-
-// import React from 'react';
-
-// const Input = ({ title, id, type = "text", placeholder, value, onChange, error }) => {
-//     return (
-//         <div>
-//             <label htmlFor={id}>{title}</label>
-//             <input
-//                 id={id}
-//                 type={type}
-//                 placeholder={placeholder}
-//                 value={value}
-//                 onChange={(e) => onChange(e.target.value)}
-//             />
-//             {error && <p style={{ color: "red" }}>{error}</p>}
-//         </div>
-//     );
-// };
-
-// export default Input;
-
-
-
-
-import React from 'react';
-
-const Input = ({ title, id, type = "text", placeholder, value, onChange, error }) => {
+function Input({ title, id, placeholder, onChange, value, error, isDisable }) {
     return (
-        <div>
-            {/* <label htmlFor={id}>{title}</label> */}
+        <div className="row" style={{ marginBottom: "5px" }}>
+            <label className="col-6" htmlFor={id}>{title}</label>
             <input
+                className="col-5"
+                style={error ? { border: '1px solid red' } : { border: '1px solid black' }}
                 id={id}
-                type={type}
+                //type={id.includes("password") ? "password" : "text"}
                 placeholder={placeholder}
+                onChange={onChange}
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
+                disabled={isDisable}
             />
-            {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
     );
-};
+}
 
 export default Input;

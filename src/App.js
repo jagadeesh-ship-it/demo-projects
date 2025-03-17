@@ -1,18 +1,25 @@
-
-import React, { useState } from 'react';
-import Signup from './components/Signup';
-import Login from './components/Login';
-
-   
+import React from "react";
+//import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./components/Home";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-    const [view, setView] = useState("login");
-
     return (
-        <div className="container">
-            {view === "login" ? <Login setView={setView} /> : <Signup setView={setView} />}
-        </div>
+        <Router>
+            <Routes>
+                {<Route path="/" element={<Navigate to="/signup" />} /> }
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+            </Routes>
+        </Router>
     );
 };
 
-export default App;
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+//  root.render(<App />);
+
+ export default App;

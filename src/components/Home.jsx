@@ -1,191 +1,50 @@
-// // import React from 'react';
-// // import { Container, Navbar, Nav, Button, Card } from 'react-bootstrap';
-// // //import { useNavigate } from 'react-router-dom';
 
 
 
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from "react-router-dom";
 
-// // const Home = () => {
-// //     const navigate = useNavigate();
-// //     const handleLogout = () => {
-// //         localStorage.removeItem('userDetails');
-// //         navigate('/Login');
-// //     };
-// //     return ( 
-// //         <div>
-// //             {/* Navigation Bar */}
-// //             <Navbar bg="dark" variant="dark">
-// //                 <Container>
-// //                     <Navbar.Brand>Ecommerce Website</Navbar.Brand>
-// //                     <Nav className="ms-auto">
-// //                         <Button variant="outline-light" onClick={handleLogout}>
-// //                             Logout
-// //                         </Button>
-// //                     </Nav>
-// //                 </Container>
-// //             </Navbar>
+const Home = () => {
+    const navigate = useNavigate();
 
-// //             {/* Main Content */}
-// //             <Container className="mt-4">
-// //                 <Card>
-// //                     <Card.Body>
-// //                         <Card.Title>Welcome to Ecommerce site</Card.Title>
-// //                         <Card.Text>
-// //                             Our system helps you to give you great shopping experience. You can view products, add to cart, place order, track
-// //                             and more, all in one efficient platform.
-// //                         </Card.Text>
-// //                         {/* Additional navigation buttons */}
-// //                         {/* <div>
-// //                   <Button variant="primary" className="me-2" onClick={() => navigate('/signup')}>
-// //                     Sign Up
-// //                   </Button>
-// //                   <Button variant="secondary" onClick={() => navigate('/login')}>
-// //                     Sign In
-// //                   </Button>
-// //                 </div> */}
-// //                     </Card.Body>
-// //                 </Card>
-// //             </Container>
-// //         </div>
-// //     );
-// // };
+    return (
+        <div>
+           
+            <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div className="container">
+                    {/* <a className="navbar-brand" href="#">MyApp</a> */}
+                    <Link className="navbar-brand" to="/home">MyApp</Link>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                            <li className="nav-item">
+                                <button className="btn btn-light me-2" onClick={() => navigate("/home")}>Home</button>
+                            </li>
+                            <li className="nav-item">
+                                <button className="btn btn-light me-2" onClick={() => alert("About Page")}>About</button>
+                            </li>
+                            <li className="nav-item">
+                                <button className="btn btn-light me-2" onClick={() => alert("Apply Page")}>Apply</button>
+                            </li>
+                            <li className="nav-item">
+                                <button className="btn btn-danger" onClick={() => navigate("/signup")}>Logout</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
 
-// // export default Home;
-
-
-// import React, { useState } from 'react';
-
-// import { Container, Navbar, Nav, Button, Card } from 'react-bootstrap';
-
-// const Home = () => {
-
-//     const [currentView, setCurrentView] = useState('home');
-
-//     const handleLogout = () => {
-
-//         localStorage.removeItem('userDetails');
-
-//         setCurrentView('login');
-
-//     };
-
-//     const renderView = () => {
-
-//         switch (currentView) {
-
-//             case 'home':
-
-//                 return (
-//                     <Container className="mt-4">
-//                         <Card>
-//                             <Card.Body>
-//                                 <Card.Title>Welcome to the College Management System</Card.Title>
-//                                 <Card.Text>
-
-//                                     Our system helps you manage student registrations, teacher details, attendance records,
-
-//                                     grades, and more, all in one efficient platform.
-//                                 </Card.Text>
-//                                 <div>
-//                                     <Button variant="primary" className="me-2" onClick={() => setCurrentView('signup')}>
-
-//                                         Sign Up
-//                                     </Button>
-//                                     <Button variant="secondary" onClick={() => setCurrentView('login')}>
-
-//                                         Sign In
-//                                     </Button>
-//                                 </div>
-//                             </Card.Body>
-//                         </Card>
-//                     </Container>
-
-//                 );
-
-//             case 'signup':
-
-//                 return <h2>Signup Page (To be implemented)</h2>;
-
-//             case 'login':
-
-//                 return <h2>Login Page (To be implemented)</h2>;
-
-//             default:
-
-//                 return <h2>Page Not Found</h2>;
-
-//         }
-
-//     };
-
-//     return (
-//         <div>
-
-//             {/* Navigation Bar */}
-//             <Navbar bg="dark" variant="dark">
-//                 <Container>
-//                     <Navbar.Brand>College Management System</Navbar.Brand>
-//                     <Nav className="ms-auto">
-//                         <Button variant="outline-light" onClick={handleLogout}>
-
-//                             Logout
-//                         </Button>
-//                     </Nav>
-//                 </Container>
-//             </Navbar>
-
-//             {renderView()}
-//         </div>
-
-//     );
-
-// };
-
-// export default Home;
-
-
-import React from "react";
-import { Navbar, Nav, Container, Button, Row, Col } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-
-const Home = () =>
-{
- return(
-    <> 
-         <Navbar bg="dark" variant="dark" expand="lg">
-                <Container>
-                    <Navbar.Brand href="#">College Management</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ms-auto">
-                            <Nav.Link href="#">Home</Nav.Link>
-                            <Nav.Link href="/Login">Login</Nav.Link>
-                            <Nav.Link href="/Signup">Signup</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-
-
-            <Container className="mt-5 text-center">
-                <Row className="justify-content-center">
-                    <Col md={8}>
-                        <h1>Welcome to College Managment</h1>
-                        <p className="lead">
-                            This is a simple home page of college Management
-                        </p>
-                        <Button variant="primary" size="lg" href="/signup">
-                            Get Started
-                        </Button>
-                    </Col>
-                </Row>
-            </Container>
-        </>
+            {/* Home Page Content */}
+            <div className="container mt-4">
+                <h2>Welcome to the Home Page!</h2>
+                <p>This is the main page after login. You can navigate using the menu above.</p>
+            </div>
+        </div>
     );
 };
+
 export default Home;
-    
- 
-
-
-
