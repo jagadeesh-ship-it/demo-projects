@@ -1,48 +1,42 @@
-
-
-
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home = () => {
     const navigate = useNavigate();
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const handleLogout = () => {
+        alert("Logged out successfully!");
+        navigate("/login");
+    };
 
     return (
-        <div>
-           
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div className="container">
-                    {/* <a className="navbar-brand" href="#">MyApp</a> */}
-                    <Link className="navbar-brand" to="/home">MyApp</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span className="navbar-toggler-icon"></span>
+        <div className="container mt-5">
+            <div className="d-flex justify-content-between align-items-center">
+                <h2>Welcome to Home Page</h2>
+                <div className="position-relative">
+                    <button className="btn btn-secondary" onClick={() => setShowDropdown(!showDropdown)}>
+                        Menu
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <button className="btn btn-light me-2" onClick={() => navigate("/home")}>Home</button>
-                            </li>
-                            <li className="nav-item">
-                                <button className="btn btn-light me-2" onClick={() => alert("About Page")}>About</button>
-                            </li>
-                            <li className="nav-item">
-                                <button className="btn btn-light me-2" onClick={() => alert("Apply Page")}>Apply</button>
-                            </li>
-                            <li className="nav-item">
-                                <button className="btn btn-danger" onClick={() => navigate("/signup")}>Logout</button>
-                            </li>
-                        </ul>
-                    </div>
+                    {showDropdown && (
+                        <div className="position-absolute bg-white shadow p-3 rounded" style={{ right: 0, top: "100%" }}>
+                            <ul className="list-unstyled mb-0">
+                                <li>
+                                    <button className="btn btn-link text-dark" onClick={() => navigate("/profile")}>Profile</button>
+                                </li>
+                                <li>
+                                    <button className="btn btn-link text-dark" onClick={() => navigate("/about")}>About</button>
+                                </li>
+                                <li>
+                                    <button className="btn btn-link text-dark" onClick={handleLogout}>Logout</button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
-            </nav>
-
-            {/* Home Page Content */}
-            <div className="container mt-4">
-                <h2>Welcome to the Home Page!</h2>
-                <p>This is the main page after login. You can navigate using the menu above.</p>
             </div>
+            <p className="mt-3">This is your home page styled with Bootstrap.</p>
         </div>
     );
 };
