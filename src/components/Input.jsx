@@ -23,7 +23,7 @@
 
 import React from "react";
 
-function Input({ title, id, placeholder, onChange, value, error, isDisable }) {
+function Input({ title, id, placeholder, onChange, value, error, isDisable,className }) {
     return (
         <div className="row" style={{ marginBottom: "5px" }}>
             <label
