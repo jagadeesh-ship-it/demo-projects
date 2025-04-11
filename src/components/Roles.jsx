@@ -24,7 +24,7 @@
 //             const res = await axios.get("http://localhost:5000/api/roles", {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
-//             setRoles(res.data.data || res.data); // support both styles
+//             setRoles(res.data.data || res.data); // Option 1 fallback
 //         } catch (err) {
 //             console.error("Failed to fetch roles:", err);
 //         }
@@ -35,17 +35,16 @@
 //     }, [fetchRoles]);
 
 //     const handleCheckboxChange = (roleID) => {
-//         setSelectedRoles(prev =>
-//             prev.includes(roleID)
-//                 ? prev.filter(id => id !== roleID)
-//                 : [...prev, roleID]
+//         setSelectedRoles((prev) =>
+//             prev.includes(roleID) ? prev.filter((id) => id !== roleID) : [...prev, roleID]
 //         );
 //     };
 
 //     const handleDeleteSelected = async () => {
 //         if (selectedRoles.length === 0) return;
 //         try {
-//             await axios.post("http://localhost:5000/api/roles/delete-multiple",
+//             await axios.post(
+//                 "http://localhost:5000/api/roles/delete-multiple",
 //                 { roleIDs: selectedRoles },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
@@ -59,7 +58,7 @@
 //     const handleDeleteSingle = async (roleID) => {
 //         try {
 //             await axios.delete(`http://localhost:5000/api/roles/${roleID}`, {
-//                 headers: { Authorization: `Bearer ${token}` }
+//                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             fetchRoles();
 //         } catch (err) {
@@ -75,7 +74,8 @@
 
 //     const handleSaveEdit = async () => {
 //         try {
-//             await axios.put(`http://localhost:5000/api/roles/${editRoleID}`,
+//             await axios.put(
+//                 `http://localhost:5000/api/roles/${editRoleID}`,
 //                 { roleName: editRoleName },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
@@ -89,7 +89,8 @@
 //     const handleAddNewRole = async () => {
 //         if (!newRoleName.trim()) return;
 //         try {
-//             await axios.post("http://localhost:5000/api/roles",
+//             await axios.post(
+//                 "http://localhost:5000/api/roles",
 //                 { roleName: newRoleName },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
@@ -119,7 +120,7 @@
 //             </div>
 
 //             <Table striped bordered hover>
-//                 <thead>
+//                 <thead className="table-dark">
 //                     <tr>
 //                         <th>Select</th>
 //                         <th>ID</th>
@@ -184,8 +185,12 @@
 //                     </Form.Group>
 //                 </Modal.Body>
 //                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={() => setShowEditModal(false)}>Cancel</Button>
-//                     <Button variant="primary" onClick={handleSaveEdit}>Save Changes</Button>
+//                     <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+//                         Cancel
+//                     </Button>
+//                     <Button variant="primary" onClick={handleSaveEdit}>
+//                         Save Changes
+//                     </Button>
 //                 </Modal.Footer>
 //             </Modal>
 
@@ -205,8 +210,12 @@
 //                     </Form.Group>
 //                 </Modal.Body>
 //                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>Cancel</Button>
-//                     <Button variant="primary" onClick={handleAddNewRole}>Add Role</Button>
+//                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+//                         Cancel
+//                     </Button>
+//                     <Button variant="primary" onClick={handleAddNewRole}>
+//                         Add Role
+//                     </Button>
 //                 </Modal.Footer>
 //             </Modal>
 //         </div>
@@ -240,9 +249,10 @@ const Roles = () => {
             const res = await axios.get("http://localhost:5000/api/roles", {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setRoles(res.data.data || res.data); // support both styles
+            const rolesData = res.data.data || res.data;
+            setRoles(rolesData);
         } catch (err) {
-            console.error("Failed to fetch roles:", err);
+            console.error("❌ Failed to fetch roles:", err?.response?.data || err);
         }
     }, [token]);
 
@@ -251,35 +261,36 @@ const Roles = () => {
     }, [fetchRoles]);
 
     const handleCheckboxChange = (roleID) => {
-        setSelectedRoles(prev =>
-            prev.includes(roleID)
-                ? prev.filter(id => id !== roleID)
-                : [...prev, roleID]
+        setSelectedRoles((prev) =>
+            prev.includes(roleID) ? prev.filter((id) => id !== roleID) : [...prev, roleID]
         );
     };
 
     const handleDeleteSelected = async () => {
         if (selectedRoles.length === 0) return;
         try {
-            await axios.post("http://localhost:5000/api/roles/delete-multiple",
+            console.log("🧹 Deleting roles:", selectedRoles);
+            await axios.post(
+                "http://localhost:5000/api/roles/delete-multiple",
                 { roleIDs: selectedRoles },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setSelectedRoles([]);
             fetchRoles();
         } catch (err) {
-            console.error("Failed to delete roles:", err);
+            console.error("❌ Failed to delete selected roles:", err?.response?.data || err);
         }
     };
 
     const handleDeleteSingle = async (roleID) => {
         try {
+            console.log("🗑️ Deleting single role:", roleID);
             await axios.delete(`http://localhost:5000/api/roles/${roleID}`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
             fetchRoles();
         } catch (err) {
-            console.error("Failed to delete role:", err);
+            console.error("❌ Failed to delete role:", err?.response?.data || err);
         }
     };
 
@@ -290,22 +301,25 @@ const Roles = () => {
     };
 
     const handleSaveEdit = async () => {
+        if (!editRoleName.trim()) return;
         try {
-            await axios.put(`http://localhost:5000/api/roles/${editRoleID}`,
+            await axios.put(
+                `http://localhost:5000/api/roles/${editRoleID}`,
                 { roleName: editRoleName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setShowEditModal(false);
             fetchRoles();
         } catch (err) {
-            console.error("Failed to update role:", err);
+            console.error("❌ Failed to update role:", err?.response?.data || err);
         }
     };
 
     const handleAddNewRole = async () => {
         if (!newRoleName.trim()) return;
         try {
-            await axios.post("http://localhost:5000/api/roles",
+            await axios.post(
+                "http://localhost:5000/api/roles",
                 { roleName: newRoleName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -313,7 +327,7 @@ const Roles = () => {
             setShowAddModal(false);
             fetchRoles();
         } catch (err) {
-            console.error("Failed to add role:", err);
+            console.error("❌ Failed to add role:", err?.response?.data || err);
         }
     };
 
@@ -335,7 +349,7 @@ const Roles = () => {
             </div>
 
             <Table striped bordered hover>
-                <thead>
+                <thead className="table-dark">
                     <tr>
                         <th>Select</th>
                         <th>ID</th>
@@ -345,8 +359,8 @@ const Roles = () => {
                 </thead>
                 <tbody>
                     {roles.length > 0 ? (
-                        roles.map((role, index) => (
-                            <tr key={role.roleID || `${role.roleName}-${index}`}>
+                        roles.map((role) => (
+                            <tr key={role.roleID}>
                                 <td>
                                     <Form.Check
                                         type="checkbox"
@@ -400,8 +414,12 @@ const Roles = () => {
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleSaveEdit}>Save Changes</Button>
+                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleSaveEdit}>
+                        Save Changes
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
@@ -421,8 +439,12 @@ const Roles = () => {
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={handleAddNewRole}>Add Role</Button>
+                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleAddNewRole}>
+                        Add Role
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>
@@ -430,3 +452,4 @@ const Roles = () => {
 };
 
 export default Roles;
+

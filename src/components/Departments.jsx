@@ -15,7 +15,7 @@
 //     const [selectedDepartments, setSelectedDepartments] = useState([]);
 //     const [showEditModal, setShowEditModal] = useState(false);
 //     const [editDepartmentID, setEditDepartmentID] = useState(null);
-//     const [edit, setEditDepartmentName] = useState("");
+//     const [editDepartmentName, setEditDepartmentName] = useState("");
 //     const [showAddModal, setShowAddModal] = useState(false);
 //     const [newDepartmentName, setNewDepartmentName] = useState("");
 
@@ -23,10 +23,10 @@
 
 //     const fetchDepartments = useCallback(async () => {
 //         try {
-//             const response = await axios.get("http://localhost:5000/departments", {
+//             const response = await axios.get("http://localhost:5000/api/departments", {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
-//             setDepartments(response.data);
+//             setDepartments(response.data || []);
 //         } catch (err) {
 //             console.error("Error fetching departments", err);
 //         }
@@ -44,7 +44,7 @@
 
 //     const handleDeleteSingle = async (id) => {
 //         try {
-//             await axios.delete(`http://localhost:5000/departments/${id}`, {
+//             await axios.delete(`http://localhost:5000/api/departments/${id}`, {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             fetchDepartments();
@@ -56,14 +56,14 @@
 //     const handleDeleteSelected = async () => {
 //         try {
 //             await axios.post(
-//                 "http://localhost:5000/departments/delete-multiple",
-//                 { ids: selectedDepartments },
+//                 "http://localhost:5000/api/departments/delete-multiple",
+//                 { departmentIDs: selectedDepartments },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
 //             setSelectedDepartments([]);
 //             fetchDepartments();
 //         } catch (err) {
-//             alert(err?.response?.data?.message || "Some departments are assigned to persons");
+//             alert(err?.response?.data?.message || "Some departments are assigned to users");
 //         }
 //     };
 
@@ -77,7 +77,7 @@
 //         if (!editDepartmentName.trim()) return;
 //         try {
 //             await axios.put(
-//                 `http://localhost:5000/departments/${editDepartmentID}`,
+//                 `http://localhost:5000/api/departments/${editDepartmentID}`,
 //                 { departmentName: editDepartmentName.trim() },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
@@ -92,7 +92,7 @@
 //         if (!newDepartmentName.trim()) return;
 //         try {
 //             await axios.post(
-//                 "http://localhost:5000/departments",
+//                 "http://localhost:5000/api/departments",
 //                 { departmentName: newDepartmentName.trim() },
 //                 { headers: { Authorization: `Bearer ${token}` } }
 //             );
@@ -122,7 +122,7 @@
 //             </div>
 
 //             <Table striped bordered hover>
-//                 <thead>
+//                 <thead className="table-dark">
 //                     <tr>
 //                         <th>Select</th>
 //                         <th>ID</th>
@@ -226,9 +226,6 @@
 // };
 
 // export default Departments;
-
-
-
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
@@ -254,7 +251,7 @@ const Departments = () => {
             const response = await axios.get("http://localhost:5000/api/departments", {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setDepartments(response.data || []);
+            setDepartments(response.data.data || response.data); // support Option 1
         } catch (err) {
             console.error("Error fetching departments", err);
         }
@@ -285,13 +282,13 @@ const Departments = () => {
         try {
             await axios.post(
                 "http://localhost:5000/api/departments/delete-multiple",
-                { departmentIDs: selectedDepartments },
+                { ids: selectedDepartments },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setSelectedDepartments([]);
             fetchDepartments();
         } catch (err) {
-            alert(err?.response?.data?.message || "Some departments are assigned to users");
+            alert(err?.response?.data?.message || "Error deleting selected departments");
         }
     };
 
@@ -309,8 +306,8 @@ const Departments = () => {
                 { departmentName: editDepartmentName.trim() },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            fetchDepartments();
             setShowEditModal(false);
+            fetchDepartments();
         } catch (err) {
             alert("Update failed");
         }
@@ -324,9 +321,9 @@ const Departments = () => {
                 { departmentName: newDepartmentName.trim() },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            fetchDepartments();
-            setNewDepartmentName("");
             setShowAddModal(false);
+            setNewDepartmentName("");
+            fetchDepartments();
         } catch (err) {
             alert("Failed to add department");
         }
@@ -334,7 +331,7 @@ const Departments = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Departments</h2>
+            <h2>🏢 Departments</h2>
 
             <div className="mb-3 d-flex gap-2">
                 <Button variant="success" onClick={() => setShowAddModal(true)}>
@@ -391,7 +388,7 @@ const Departments = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="4" className="text-center text-muted">
                                 No departments found.
                             </td>
                         </tr>
@@ -436,7 +433,6 @@ const Departments = () => {
                             type="text"
                             value={newDepartmentName}
                             onChange={(e) => setNewDepartmentName(e.target.value)}
-                            placeholder="Enter department name"
                         />
                     </Form.Group>
                 </Modal.Body>
@@ -454,3 +450,4 @@ const Departments = () => {
 };
 
 export default Departments;
+

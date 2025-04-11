@@ -3,19 +3,31 @@
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-// import { FaSignOutAlt, FaUser } from 'react-icons/fa';
-
+// import { FaBars, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 // import Sidebar from './Sidebar';
-// import Admin from './Roles';
+// import Roles from './Roles';
 // import Departments from './Departments';
-// import RoleAssign from './RolesAssign'
+// import RoleAssign from './RolesAssign';
+// import img from  "../img/Homeimg.jpg";
+
+// const divStyle = {
+//     width: "100vw",
+//     height: "100vh",
+//     backgroundImage: `url(${img})`,
+//     backgroundSize: "cover",
+//     backgroundPosition: "center",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+// };
 
 // const Home = () => {
 //     const navigate = useNavigate();
-//     const [showProfile, setShowProfile] = useState(false);
 //     const [user, setUser] = useState(null);
-//     const [sessionTimer, setSessionTimer] = useState(null);
+//     const [showProfile, setShowProfile] = useState(false);
+//     const [showSidebar, setShowSidebar] = useState(true);
 //     const [activeSection, setActiveSection] = useState('home');
+//     const [sessionTimer, setSessionTimer] = useState(null);
 
 //     const logoutUser = useCallback(async () => {
 //         try {
@@ -33,16 +45,16 @@
 //         const timer = setTimeout(() => {
 //             alert("Session expired. Please login again.");
 //             logoutUser();
-//         }, 2 * 60 * 1000); // 2 minutes
+//         }, 2 * 60 * 1000);
 //         setSessionTimer(timer);
 //     }, [sessionTimer, logoutUser]);
 
 //     useEffect(() => {
-//         const fetchUserData = async () => {
+//         const fetchUser = async () => {
 //             try {
-//                 const response = await axios.get("http://localhost:5000/profile", { withCredentials: true });
-//                 if (response.data.success) {
-//                     setUser(response.data.user);
+//                 const res = await axios.get("http://localhost:5000/profile", { withCredentials: true });
+//                 if (res.data.success) {
+//                     setUser(res.data.user);
 //                     startSessionTimer();
 //                 } else {
 //                     logoutUser();
@@ -51,55 +63,294 @@
 //                 logoutUser();
 //             }
 //         };
-
-//         fetchUserData();
+//         fetchUser();
 //     }, [logoutUser, startSessionTimer]);
 
-//     useEffect(() => {
-//         return () => clearTimeout(sessionTimer);
-//     }, [sessionTimer]);
+//     useEffect(() => () => clearTimeout(sessionTimer), [sessionTimer]);
 
 //     return (
-//         <div className="d-flex flex-column vh-100">
-//             {/* Header */}
-//             <header className="d-flex justify-content-between align-items-center bg-dark text-white p-3">
-//                 <h3 className="m-0">College Dashboard</h3>
-//                 {user && (
+//         <div style={divStyle}>
+//         <div className="d-flex vh-100 overflow-hidden">
+//             {showSidebar && <Sidebar setSelectedSection={setActiveSection} />}
+//             <div className="flex-grow-1 d-flex flex-column">
+//                 <header className="d-flex justify-content-between align-items-center bg-primary text-white p-3">
 //                     <div className="d-flex align-items-center">
-//                         <button className="btn btn-light me-3" onClick={() => setShowProfile(!showProfile)}>
-//                             <FaUser className="me-2" /> Profile
-//                         </button>
-//                         <button className="btn btn-danger" onClick={logoutUser}>
-//                             <FaSignOutAlt className="me-2" /> Logout
-//                         </button>
+//                         <FaBars size={24} className="me-3 cursor-pointer" onClick={() => setShowSidebar(!showSidebar)} />
+//                         <h4 className="m-0">EasyBuy Dashboard</h4>
 //                     </div>
-//                 )}
-//             </header>
+//                     <div className="position-relative">
+//                         <FaUserCircle
+//                             size={30}
+//                             className="cursor-pointer"
+//                             onClick={() => setShowProfile(!showProfile)}
+//                         />
+//                         {showProfile && user && (
+//                             <div className="position-absolute end-0 mt-2 bg-white border rounded shadow p-3" style={{ zIndex: 100 }}>
+//                                 <p className="mb-1"><strong>Name:</strong> {user.username}</p>
+//                                 <p className="mb-1"><strong>Email:</strong> {user.email}</p>
+//                                 <p className="mb-2"><strong>Phone:</strong> {user.phone}</p>
+//                                 <button className="btn btn-sm btn-danger w-100" onClick={logoutUser}>
+//                                     <FaSignOutAlt className="me-1" /> Logout
+//                                 </button>
+//                             </div>
+                        
+//                         )}
+//                     </div>
+//                 </header>
+//                 </div>
 
-//             {/* Body Layout */}
-//             <div className="d-flex flex-grow-1">
-//                 <Sidebar setActiveSection={setActiveSection} />
-//                 <div className="container-fluid mt-4 flex-grow-1">
-//                     {activeSection === 'home' && <h2>Welcome, {user?.username || 'User'}!</h2>}
-//                     {activeSection === 'admin' && <Admin />}
+//                 <main className="p-4 overflow-auto" style={{ flexGrow: 1 }}>
+//                     {activeSection === 'home' && <h3>Welcome, {user?.username || 'User'}!</h3>}
+//                     {activeSection === 'roles' && <Roles />}
 //                     {activeSection === 'departments' && <Departments />}
-//                     {activeSection === 'roleassign' && <RoleAssign />}
+//                     {activeSection === 'roleAssign' && <RoleAssign />}
+//                 </main>
 
-//                     {/* Profile Card */}
+//                 <footer className="bg-light text-center py-2 border-top">
+//                     <small>&copy; {new Date().getFullYear()} EasyBuy | All rights reserved</small>
+//                 </footer>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default Home;
+// import React, { useState, useEffect, useCallback } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import { FaBars, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+// import Sidebar from './Sidebar';
+// import Roles from './Roles';
+// import Departments from './Departments';
+// import RoleAssign from './RolesAssign';
+// import img from "../img/Homeimg.jpg";
+
+// const Home = () => {
+//     const navigate = useNavigate();
+//     const [user, setUser] = useState(null);
+//     const [showProfile, setShowProfile] = useState(false);
+//     const [showSidebar, setShowSidebar] = useState(true);
+//     const [activeSection, setActiveSection] = useState('home');
+//     const [sessionTimer, setSessionTimer] = useState(null);
+
+//     const logoutUser = useCallback(async () => {
+//         try {
+//             await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+//         } catch (error) {
+//             console.error("Logout failed", error);
+//         }
+//         localStorage.removeItem("token");
+//         localStorage.removeItem("user");
+//         navigate("/login");
+//     }, [navigate]);
+
+//     const startSessionTimer = useCallback(() => {
+//         if (sessionTimer) clearTimeout(sessionTimer);
+//         const timer = setTimeout(() => {
+//             alert("Session expired. Please login again.");
+//             logoutUser();
+//         }, 2 * 60 * 1000);
+//         setSessionTimer(timer);
+//     }, [sessionTimer, logoutUser]);
+
+//     useEffect(() => {
+//         const fetchUser = async () => {
+//             try {
+//                 const res = await axios.get("http://localhost:5000/profile", { withCredentials: true });
+//                 if (res.data.success) {
+//                     setUser(res.data.user);
+//                     startSessionTimer();
+//                 } else {
+//                     logoutUser();
+//                 }
+//             } catch (error) {
+//                 logoutUser();
+//             }
+//         };
+//         fetchUser();
+//     }, [logoutUser, startSessionTimer]);
+
+//     useEffect(() => () => clearTimeout(sessionTimer), [sessionTimer]);
+
+//     return (
+//         <div className="d-flex vh-100 overflow-hidden">
+//             {showSidebar && <Sidebar setSelectedSection={setActiveSection} />}
+//             <div className="flex-grow-1 d-flex flex-column">
+//                 <header className="d-flex justify-content-between align-items-center bg-primary text-white p-3">
+//                     <div className="d-flex align-items-center">
+//                         <FaBars size={24} className="me-3 cursor-pointer" onClick={() => setShowSidebar(!showSidebar)} />
+//                         <h4 className="m-0">EasyBuy Dashboard</h4>
+//                     </div>
+//                     <div className="position-relative">
+//                         <FaUserCircle
+//                             size={30}
+//                             className="cursor-pointer"
+//                             onClick={() => setShowProfile(!showProfile)}
+//                         />
+//                         {showProfile && user && (
+//                             <div className="position-absolute end-0 mt-2 bg-white border rounded shadow p-3" style={{ zIndex: 100 }}>
+//                                 <p className="mb-1"><strong>Name:</strong> {user.username}</p>
+//                                 <p className="mb-1"><strong>Email:</strong> {user.email}</p>
+//                                 <p className="mb-2"><strong>Phone:</strong> {user.phone}</p>
+//                                 <button className="btn btn-sm btn-danger w-100" onClick={logoutUser}>
+//                                     <FaSignOutAlt className="me-1" /> Logout
+//                                 </button>
+//                             </div>
+//                         )}
+//                     </div>
+//                 </header>
+
+//                 <main className="p-4 overflow-auto" style={{ flexGrow: 1 }}>
+//                     {activeSection === 'home' && (
+//                         <div
+//                             style={{
+//                                 width: "100%",
+//                                 height: "100%",
+//                                 backgroundImage: `url(${img})`,
+//                                 backgroundSize: "cover",
+//                                 backgroundPosition: "center",
+//                                 borderRadius: "8px",
+//                                 display: "flex",
+//                                 justifyContent: "center",
+//                                 alignItems: "center",
+//                                 color: "#fff",
+//                                 textShadow: "1px 1px 4px rgba(0,0,0,0.7)"
+//                             }}
+//                         >
+//                             <h3>Welcome, {user?.username || 'User'}!</h3>
+//                         </div>
+//                     )}
+//                     {activeSection === 'roles' && <Roles />}
+//                     {activeSection === 'departments' && <Departments />}
+//                     {activeSection === 'roleAssign' && <RoleAssign />}
+//                 </main>
+
+//                 <footer className="bg-light text-center py-2 border-top">
+//                     <small>&copy; {new Date().getFullYear()} EasyBuy | All rights reserved</small>
+//                 </footer>
+//             </div>
+//         </div>
+//     );
+// };
+
+// // export default Home;
+// import React, { useState, useEffect, useCallback } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+// import Roles from './Roles';
+// import Departments from './Departments';
+// import RoleAssign from './RolesAssign';
+// import SubHeader from './SubHeader';
+// import img from "../img/Homeimg.jpg";
+
+// const Home = () => {
+//     const navigate = useNavigate();
+//     const [user, setUser] = useState(null);
+//     const [showProfile, setShowProfile] = useState(false);
+//     const [activeSection, setActiveSection] = useState('home');
+//     const [sessionTimer, setSessionTimer] = useState(null);
+
+//     const logoutUser = useCallback(async () => {
+//         try {
+//             await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+//         } catch (error) {
+//             console.error("Logout failed", error);
+//         }
+//         localStorage.removeItem("token");
+//         localStorage.removeItem("user");
+//         navigate("/login");
+//     }, [navigate]);
+
+//     const startSessionTimer = useCallback(() => {
+//         if (sessionTimer) clearTimeout(sessionTimer);
+//         const timer = setTimeout(() => {
+//             alert("Session expired. Please login again.");
+//             logoutUser();
+//         }, 2 * 60 * 1000);
+//         setSessionTimer(timer);
+//     }, [sessionTimer, logoutUser]);
+
+//     useEffect(() => {
+//         const fetchUser = async () => {
+//             try {
+//                 const res = await axios.get("http://localhost:5000/profile", { withCredentials: true });
+//                 if (res.data.success) {
+//                     setUser(res.data.user);
+//                     startSessionTimer();
+//                 } else {
+//                     logoutUser();
+//                 }
+//             } catch (error) {
+//                 logoutUser();
+//             }
+//         };
+//         fetchUser();
+//     }, [logoutUser, startSessionTimer]);
+
+//     useEffect(() => () => clearTimeout(sessionTimer), [sessionTimer]);
+
+//     return (
+//         <div className="d-flex flex-column vh-100 overflow-hidden">
+//             <header className="d-flex justify-content-between align-items-center bg-primary text-white p-3">
+//                 <h4 className="m-0">EasyBuy Dashboard</h4>
+//                 <div className="position-relative">
+//                     <FaUserCircle
+//                         size={30}
+//                         className="cursor-pointer"
+//                         onClick={() => setShowProfile(!showProfile)}
+//                     />
 //                     {showProfile && user && (
-//                         <div className="card mt-4 p-3" style={{ maxWidth: '400px' }}>
-//                             <h5>Profile Info</h5>
-//                             <p><strong>Username:</strong> {user.username}</p>
-//                             <p><strong>Email:</strong> {user.email}</p>
-//                             <p><strong>Phone:</strong> {user.phone}</p>
+//                         <div className="position-absolute end-0 mt-2 bg-white border rounded shadow p-3" style={{ zIndex: 100 }}>
+//                             <p className="mb-1"><strong>Name:</strong> {user.username}</p>
+//                             <p className="mb-1"><strong>Email:</strong> {user.email}</p>
+//                             <p className="mb-2"><strong>Phone:</strong> {user.phone}</p>
+//                             <button className="btn btn-sm btn-danger w-100" onClick={logoutUser}>
+//                                 <FaSignOutAlt className="me-1" /> Logout
+//                             </button>
 //                         </div>
 //                     )}
 //                 </div>
-//             </div>
+//             </header>
 
-//             {/* Footer */}
-//             <footer className="bg-dark text-white text-center py-2">
-//                 &copy; {new Date().getFullYear()} EASYBUY. All rights reserved.
+//             {/* SubHeader navigation */}
+//             <SubHeader setActiveSection={setActiveSection} />
+
+//             <main className="p-4 overflow-auto flex-grow-1">
+//                 {activeSection === 'home' && (
+//                     <div
+//                         style={{
+//                             width: "100%",
+//                             height: "100%",
+//                             backgroundImage: `url(${img})`,
+//                             backgroundSize: "cover",
+//                             backgroundPosition: "center",
+//                             borderRadius: "8px",
+//                             display: "flex",
+//                             justifyContent: "center",
+//                             alignItems: "center",
+//                             color: "#fff",
+//                             textShadow: "1px 1px 4px rgba(0,0,0,0.7)"
+//                         }}
+//                     >
+//                         <h3>Welcome, {user?.username || 'User'}!</h3>
+//                     </div>
+//                 )}
+//                 {activeSection === 'about' && (
+//                     <div>
+//                         <h4>About Us</h4>
+//                         <p>This is the EasyBuy Dashboard system. Here you can manage roles, departments, and more.</p>
+//                     </div>
+//                 )}
+//                 {activeSection === 'roles' && <Roles />}
+//                 {activeSection === 'departments' && <Departments />}
+//                 {activeSection === 'roleAssign' && <RoleAssign />}
+//             </main>
+
+//             <footer className="bg-light text-center py-2 border-top">
+//                 <small>&copy; {new Date().getFullYear()} EasyBuy | All rights reserved</small>
 //             </footer>
 //         </div>
 //     );
@@ -107,22 +358,22 @@
 
 // export default Home;
 
-// Home.jsx
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaBars, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
-import Sidebar from './Sidebar';
+import { FaUserCircle } from 'react-icons/fa';
 import Roles from './Roles';
 import Departments from './Departments';
 import RoleAssign from './RolesAssign';
+import SubHeader from './SubHeader';
+import Profile from './Profile'; // ✅ NEW IMPORT
+import img from "../img/Homeimg.jpg";
 
 const Home = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
     const [showProfile, setShowProfile] = useState(false);
-    const [showSidebar, setShowSidebar] = useState(true);
     const [activeSection, setActiveSection] = useState('home');
     const [sessionTimer, setSessionTimer] = useState(null);
 
@@ -147,11 +398,10 @@ const Home = () => {
     }, [sessionTimer, logoutUser]);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const verifySession = async () => {
             try {
                 const res = await axios.get("http://localhost:5000/profile", { withCredentials: true });
                 if (res.data.success) {
-                    setUser(res.data.user);
                     startSessionTimer();
                 } else {
                     logoutUser();
@@ -160,50 +410,61 @@ const Home = () => {
                 logoutUser();
             }
         };
-        fetchUser();
+        verifySession();
     }, [logoutUser, startSessionTimer]);
 
     useEffect(() => () => clearTimeout(sessionTimer), [sessionTimer]);
 
     return (
-        <div className="d-flex vh-100 overflow-hidden">
-            {showSidebar && <Sidebar setSelectedSection={setActiveSection} />}
-            <div className="flex-grow-1 d-flex flex-column">
-                <header className="d-flex justify-content-between align-items-center bg-primary text-white p-3">
-                    <div className="d-flex align-items-center">
-                        <FaBars size={24} className="me-3 cursor-pointer" onClick={() => setShowSidebar(!showSidebar)} />
-                        <h4 className="m-0">EasyBuy Dashboard</h4>
-                    </div>
-                    <div className="position-relative">
-                        <FaUserCircle
-                            size={30}
-                            className="cursor-pointer"
-                            onClick={() => setShowProfile(!showProfile)}
-                        />
-                        {showProfile && user && (
-                            <div className="position-absolute end-0 mt-2 bg-white border rounded shadow p-3" style={{ zIndex: 100 }}>
-                                <p className="mb-1"><strong>Name:</strong> {user.username}</p>
-                                <p className="mb-1"><strong>Email:</strong> {user.email}</p>
-                                <p className="mb-2"><strong>Phone:</strong> {user.phone}</p>
-                                <button className="btn btn-sm btn-danger w-100" onClick={logoutUser}>
-                                    <FaSignOutAlt className="me-1" /> Logout
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </header>
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <header className="d-flex justify-content-between align-items-center bg-primary text-white p-3">
+                <h4 className="m-0">EasyBuy Dashboard</h4>
+                <div className="position-relative">
+                    <FaUserCircle
+                        size={30}
+                        className="cursor-pointer"
+                        onClick={() => setShowProfile(!showProfile)}
+                    />
+                    {showProfile && <Profile onClose={() => setShowProfile(false)} />} {/* ✅ REPLACED INLINE PROFILE */}
+                </div>
+            </header>
 
-                <main className="p-4 overflow-auto" style={{ flexGrow: 1 }}>
-                    {activeSection === 'home' && <h3>Welcome, {user?.username || 'User'}!</h3>}
-                    {activeSection === 'roles' && <Roles />}
-                    {activeSection === 'departments' && <Departments />}
-                    {activeSection === 'roleAssign' && <RoleAssign />}
-                </main>
+            <SubHeader setActiveSection={setActiveSection} />
 
-                <footer className="bg-light text-center py-2 border-top">
-                    <small>&copy; {new Date().getFullYear()} EasyBuy | All rights reserved</small>
-                </footer>
-            </div>
+            <main className="p-4 overflow-auto flex-grow-1">
+                {activeSection === 'home' && (
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundImage: `url(${img})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            color: "#fff",
+                            textShadow: "1px 1px 4px rgba(0,0,0,0.7)"
+                        }}
+                    >
+                        <h3>Welcome to EasyBuy!</h3>
+                    </div>
+                )}
+                {activeSection === 'about' && (
+                    <div>
+                        <h4>About Us</h4>
+                        <p>This is the EasyBuy Dashboard system. Here you can manage roles, departments, and more.</p>
+                    </div>
+                )}
+                {activeSection === 'roles' && <Roles />}
+                {activeSection === 'departments' && <Departments />}
+                {activeSection === 'roleAssign' && <RoleAssign />}
+            </main>
+
+            <footer className="bg-light text-center py-2 border-top">
+                <small>&copy; {new Date().getFullYear()} EasyBuy | All rights reserved</small>
+            </footer>
         </div>
     );
 };
