@@ -1,35 +1,4 @@
-// import React, { useState } from "react";
 
-// const PageDropdown = ({ title, items, onItemClick }) => {
-//     const [isOpen, setIsOpen] = useState(false);
-
-//     return (
-//         <div className="dropdown">
-//             <button
-//                 className="btn btn-warning dropdown-toggle"
-//                 onClick={() => setIsOpen(!isOpen)}
-//             >
-//                 {title}
-//             </button>
-//             {isOpen && (
-//                 <ul className="dropdown-menu show">
-//                     {items.map((item, index) => (
-//                         <li
-//                             key={index}
-//                             className="dropdown-item"
-//                             onClick={() => onItemClick(item)}
-//                             style={{ cursor: "pointer" }}
-//                         >
-//                             {item}
-//                         </li>
-//                     ))}
-//                 </ul>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default PageDropdown;
 import React, { useState } from 'react';
 import { FaUsers, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 

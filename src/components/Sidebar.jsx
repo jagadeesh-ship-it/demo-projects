@@ -1,27 +1,4 @@
 
-
-// import React from "react";
-
-// const Sidebar = ({ isOpen, setSelectedSection }) => {
-//     return (
-//         <div className={`bg-light border-end ${isOpen ? "d-block" : "d-none"}`} style={{ width: "250px" }}>
-//             <div className="list-group list-group-flush">
-//                 <button onClick={() => setSelectedSection("home")} className="list-group-item list-group-item-action">Home</button>
-//                 <button onClick={() => setSelectedSection("about")} className="list-group-item list-group-item-action">About</button>
-//                 <button onClick={() => setSelectedSection("apply")} className="list-group-item list-group-item-action">Apply</button>
-//                 <div className="list-group-item">
-//                     <strong>Admin Section</strong>
-//                     <button onClick={() => setSelectedSection("roles")} className="list-group-item list-group-item-action text-dark fw-bold">Roles</button>
-//                     <button onClick={() => setSelectedSection("departments")} className="list-group-item list-group-item-action text-dark fw-bold">Departments</button>
-//                     <button onClick={() => setSelectedSection("roleAssign")} className="list-group-item list-group-item-action text-dark fw-bold">Role Assign</button>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Sidebar;
-
 import React from "react";
 import { FaHome, FaBuilding, FaUserShield, FaClipboardList } from "react-icons/fa";
 
